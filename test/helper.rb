@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'qna'
+require 'qeweney'
 
 require 'fileutils'
 
@@ -10,7 +10,7 @@ require_relative './coverage' if ENV['COVERAGE']
 require 'minitest/autorun'
 require 'minitest/reporters'
 
-module QNA
+module Qeweney
   def self.mock(headers)
     Request.new(headers, nil)
   end

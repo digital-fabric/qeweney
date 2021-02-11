@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module QNA
+module Qeweney
   module RoutingMethods
     def route(&block)
       res = catch(:stop) { yield self }

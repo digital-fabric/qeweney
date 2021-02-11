@@ -3,7 +3,7 @@
 require 'uri'
 require 'escape_utils'
 
-module QNA
+module Qeweney
   module RequestInfoMethods
     def host
       @headers['host']

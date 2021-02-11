@@ -4,7 +4,7 @@ require_relative './request_info'
 require_relative './routing'
 require_relative './response'
 
-module QNA
+module Qeweney
   # HTTP request
   class Request
     include RequestInfoMethods

@@ -1,18 +1,18 @@
-require_relative './lib/qna/version'
+require_relative './lib/qeweney/version'
 
 Gem::Specification.new do |s|
-  s.name        = 'qna'
-  s.version     = QNA::VERSION
+  s.name        = 'qeweney'
+  s.version     = Qeweney::VERSION
   s.licenses    = ['MIT']
-  s.summary     = 'QNA - cross library HTTP request / response API'
+  s.summary     = 'Qeweney - cross library HTTP request / response API'
   s.author      = 'Sharon Rosner'
   s.email       = 'sharon@noteflakes.com'
   s.files       = `git ls-files`.split
-  s.homepage    = 'http://github.com/digital-fabric/qna'
+  s.homepage    = 'http://github.com/digital-fabric/qeweney'
   s.metadata    = {
-    "source_code_uri" => "https://github.com/digital-fabric/qna"
+    "source_code_uri" => "https://github.com/digital-fabric/qeweney"
   }
-  s.rdoc_options = ["--title", "QNA", "--main", "README.md"]
+  s.rdoc_options = ["--title", "Qeweney", "--main", "README.md"]
   s.extra_rdoc_files = ["README.md"]
   s.require_paths = ["lib"]
   s.required_ruby_version = '>= 2.6'
