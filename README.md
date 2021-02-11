@@ -1,8 +1,8 @@
-# QNA
+# Qeweney
 
 ## Cross-library feature rich HTTP request / response API
 
-QNA provides a uniform API for dealing with HTTP requests and responses.
+Qeweney provides a uniform API for dealing with HTTP requests and responses.
 
 ## Features
 
