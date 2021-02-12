@@ -1,19 +1,76 @@
 # frozen_string_literal: true
 
+require 'time'
+require 'zlib'
+require 'stringio'
+
 require_relative 'status'
 
 module Qeweney
+  module StaticFileCaching
+    class << self
+      def file_stat_to_etag(stat)
+        "#{stat.mtime.to_i.to_s(36)}#{stat.size.to_s(36)}"
+      end
+      
+      def file_stat_to_last_modified(stat)
+        stat.mtime.httpdate
+      end
+    end
+  end
+
   module ResponseMethods
     def redirect(url, status = Status::FOUND)
       respond(nil, ':status' => status, 'Location' => url)
     end
 
     def serve_file(path, opts)
-      File.open(file_full_path(path, opts), 'r') do |f|
+      full_path = file_full_path(path, opts)
+      stat = File.stat(full_path)
+      etag = StaticFileCaching.file_stat_to_etag(stat)
+      last_modified = StaticFileCaching.file_stat_to_last_modified(stat)
+
+      if validate_static_file_cache(etag, last_modified)
+        return respond(nil, {
+          ':status' => Status::NOT_MODIFIED,
+          'etag' => etag
+        })
+      end
+
+      respond_with_static_file(full_path, etag, last_modified, opts)
+    rescue Errno::ENOENT => e
+      respond(nil, ':status' => Status::NOT_FOUND)
+    end
+
+    def respond_with_static_file(path, etag, last_modified, opts)
+      File.open(path, 'r') do |f|
+        opts = opts.merge(headers: {
+          'etag' => etag,
+          'last-modified' => last_modified,
+        })
+
+        # accept_encoding should return encodings in client's order of preference
+        accept_encoding.each do |encoding|
+          case encoding
+          when 'deflate'
+            return serve_io_deflate(f, opts)
+          when 'gzip'
+            return serve_io_gzip(f, opts)
+          end
+        end
         serve_io(f, opts)
       end
-    rescue Errno::ENOENT
-      respond(nil, ':status' => Status::NOT_FOUND)
+    end
+
+    def validate_static_file_cache(etag, last_modified)
+      if (none_match = headers['if-none-match'])
+        return true if none_match == etag
+      end
+      if (modified_since = headers['if-modified-since'])
+        return true if modified_since == last_modified
+      end
+    
+      false
     end
 
     def file_full_path(path, opts)
@@ -25,7 +82,30 @@ module Qeweney
     end
 
     def serve_io(io, opts)
-      respond(io.read)
+      respond(io.read, opts[:headers] || {})
+    end
+
+    def serve_io_deflate(io, opts)
+      deflate = Zlib::Deflate.new
+      headers = opts[:headers].merge(
+        'content-encoding' => 'deflate',
+        'vary' => 'Accept-Encoding'
+      )
+
+      respond(deflate.deflate(io.read, Zlib::FINISH), headers)
+    end
+
+    def serve_io_gzip(io, opts)
+      buf = StringIO.new
+      z = Zlib::GzipWriter.new(buf)
+      z << io.read
+      z.flush
+      z.close
+      headers = opts[:headers].merge(
+        'content-encoding' => 'gzip',
+        'vary' => 'Accept-Encoding'
+      )
+      respond(buf.string, headers)
     end
   end
 end

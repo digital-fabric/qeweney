@@ -61,6 +61,15 @@ module Qeweney
     def forwarded_for
       @headers['x-forwarded-for']
     end
+
+    # TODO: should return encodings in client's order of preference (and take
+    # into account q weights)
+    def accept_encoding
+      encoding = @headers['accept-encoding']
+      return [] unless encoding
+
+      encoding.split(',').map { |i| i.strip }
+    end
   end
 
   module RequestInfoClassMethods

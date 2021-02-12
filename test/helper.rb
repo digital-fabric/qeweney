@@ -11,8 +11,26 @@ require 'minitest/autorun'
 require 'minitest/reporters'
 
 module Qeweney
-  def self.mock(headers)
-    Request.new(headers, nil)
+  class MockAdapter
+    attr_reader :calls
+
+    def initialize
+      @calls = []
+    end
+
+    def method_missing(sym, *args)
+      calls << [sym, *args]
+    end
+  end
+
+  def self.mock(headers = {})
+    Request.new(headers, MockAdapter.new)
+  end
+
+  class Request
+    def response_calls
+      adapter.calls
+    end
   end
 end
 
