@@ -1,3 +1,7 @@
+## 0.4 2021-02-12
+
+- Implement caching and compression for serving static files
+
 ## 0.3 2021-02-12
 
 - Implement `Request#serve_io`, `Request#serve_file`, `Request#redirect`
