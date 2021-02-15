@@ -166,3 +166,20 @@ class UpgradeTest < MiniTest::Test
     ], r.response_calls
   end
 end
+
+class ServeRackTest < MiniTest::Test
+  def test_serve_rack
+    r = Qeweney.mock(
+      ':method' => 'get',
+      ':path' => '/foo/bar?a=1&b=2%2F3',
+      'accept' => 'blah'
+    )
+    r.serve_rack(->(env) {
+      [404, {'Foo' => 'Bar'}, ["#{env['REQUEST_METHOD']} #{env['PATH_INFO']}"]]
+    })
+
+    assert_equal [
+      [:respond, "get /foo/bar", {':status' => 404, 'Foo' => 'Bar' }]
+    ], r.response_calls
+  end
+end

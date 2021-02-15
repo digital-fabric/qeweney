@@ -142,5 +142,14 @@ module Qeweney
       )
       respond(buf.string, headers)
     end
+
+    def serve_rack(app)
+      response = app.(Qeweney.rack_env_from_request(self))
+      headers = (response[1] || {}).merge(':status' => response[0])
+      respond(response[2].join, headers)
+
+      # TODO: send separate chunks for multi-part body
+      # TODO: add support for streaming body
+    end
   end
 end

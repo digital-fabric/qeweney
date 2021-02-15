@@ -3,6 +3,7 @@
 require_relative './request_info'
 require_relative './routing'
 require_relative './response'
+require_relative './rack'
 
 module Qeweney
   # HTTP request
