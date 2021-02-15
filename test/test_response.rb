@@ -113,3 +113,56 @@ class StaticFileResponeTest < MiniTest::Test
     ], r.response_calls
   end
 end
+
+class UpgradeTest < MiniTest::Test
+  def test_upgrade
+    r = Qeweney.mock
+    r.upgrade('df')
+
+    assert_equal [
+      [:respond, nil, {
+        ':status' => 101,
+        'Upgrade' => 'df',
+        'Connection' => 'upgrade'
+      }]
+    ], r.response_calls
+
+  
+    r = Qeweney.mock
+    r.upgrade('df', { 'foo' => 'bar' })
+
+    assert_equal [
+      [:respond, nil, {
+        ':status' => 101,
+        'Upgrade' => 'df',
+        'Connection' => 'upgrade',
+        'foo' => 'bar'
+      }]
+    ], r.response_calls
+  end
+
+  def test_websocket_upgrade
+    r = Qeweney.mock(
+      'connection' => 'upgrade',
+      'upgrade' => 'websocket',
+      'sec-websocket-version' => '23',
+      'sec-websocket-key' => 'abcdefghij'
+    )
+    
+    assert_equal 'websocket', r.upgrade_protocol
+
+    r.upgrade_to_websocket('foo' => 'baz')
+    accept = Digest::SHA1.base64digest('abcdefghij258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
+
+    assert_equal [
+      [:respond, nil, {
+        ':status' => 101,
+        'Upgrade' => 'websocket',
+        'Connection' => 'upgrade',
+        'foo' => 'baz',
+        'Sec-WebSocket-Accept' => accept
+      }],
+      [:websocket_connection, r]
+    ], r.response_calls
+  end
+end

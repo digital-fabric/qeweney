@@ -17,6 +17,10 @@ module Qeweney
       connection == 'upgrade' && @headers['upgrade']&.downcase
     end
 
+    def websocket_version
+      headers['sec-websocket-version'].to_i
+    end
+
     def protocol
       @protocol ||= @adapter.protocol
     end

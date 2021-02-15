@@ -3,6 +3,7 @@
 require 'time'
 require 'zlib'
 require 'stringio'
+require 'digest/sha1'
 
 require_relative 'status'
 
@@ -20,8 +21,42 @@ module Qeweney
   end
 
   module ResponseMethods
+    def upgrade(protocol, custom_headers = nil)
+      upgrade_headers = {
+        ':status' => Status::SWITCHING_PROTOCOLS,
+        'Upgrade' => protocol,
+        'Connection' => 'upgrade'
+      }
+      upgrade_headers.merge!(custom_headers) if custom_headers
+
+      respond(nil, upgrade_headers)
+    end
+
+    WEBSOCKET_GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+
+    def upgrade_to_websocket(custom_headers = nil)
+      key = "#{headers['sec-websocket-key']}#{WEBSOCKET_GUID}"
+      upgrade_headers = {
+        'Sec-WebSocket-Accept' => Digest::SHA1.base64digest(key)
+      }
+      upgrade_headers.merge!(custom_headers) if custom_headers
+      upgrade('websocket', upgrade_headers)
+
+      adapter.websocket_connection(self)
+    end
+
     def redirect(url, status = Status::FOUND)
       respond(nil, ':status' => status, 'Location' => url)
+    end
+
+    def redirect_to_https(status = Status::MOVED_PERMANENTLY)
+      secure_uri = "https://#{host}#{uri}"
+      redirect(secure_uri, status)
+    end
+
+    def redirect_to_host(new_host, status = Status::FOUND)
+      secure_uri = "//#{new_host}#{uri}"
+      redirect(secure_uri, status)
     end
 
     def serve_file(path, opts)

@@ -44,6 +44,18 @@ module Qeweney
 
       route_found(&block)
     end
+
+    def on_host(route, &block)
+      return unless host == route
+
+      route_found(&block)
+    end
+
+    def on_plain_http(route, &block)
+      return unless scheme == 'http'
+
+      route_found(&block)
+    end
   
     def on_get(route = nil, &block)
       return unless method == 'get'
@@ -86,8 +98,22 @@ module Qeweney
       route_found(&block)
     end
 
+    def on_upgrade(protocol, &block)
+      return unless upgrade_protocol == protocol
+
+      route_found(&block)
+    end
+
+    def on_websocket_upgrade(&block)
+      on_upgrade('websocket', &block)
+    end
+
     def stop_routing
-      yield if block_given?
+      throw :stop, :found
+    end
+
+    def default
+      yield
       throw :stop, :found
     end
   end

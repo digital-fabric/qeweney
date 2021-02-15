@@ -3,97 +3,79 @@
 - `#serve_file(path, opts)`
   - See here: https://golang.org/pkg/net/http/#ServeFile
   - support for `Range` header
-  - support for caching (specified in opts)
-  - support for serving from routing path:
-
-    ```ruby
-      req.route do
-        req.on 'assets' do
-          req.serve_file(req.routing_path, base_path: STATIC_PATH)
-        end
-      end
-
-      # or convenience method
-      req.route do
-        req.on_static_route 'assets', base_path: STATIC_PATH
-      end
-    ```
 
 - `#serve_content(io, opts)`
   - See here: https://golang.org/pkg/net/http/#ServeContent
   - support for `Range` header
-  - support for caching (specified in opts)
-  - usage:
 
-    ```ruby
-      req.route do
-        req.on 'mypdf' do
-          File.open('my.pdf', 'r') { |f| req.serve_content(io) }
-        end
-      end
-    ```
+## route on host
 
-## Caching
+- `#on_host`:
+
+  ```ruby
+  req.route do
+    req.on_host 'example.com' do
+      req.redirect "https://www.example.com#{req.uri}"
+    end
+  end
+  ```
+
+- `#on_http`:
+
+  ```ruby
+  req.route do
+    req.on_http do
+      req.redirect "https://#{req.host}#{req.uri}"
+    end
+  end
+  ```
+
+- shorthand:
+
+  ```ruby
+  req.route do
+    req.on_http { req.redirect_to_https }
+    req.on_host 'example.com' do
+      req.redirect_to_host('www.example.com')
+    end
+  end
+  ```
+
+## templates
+
+- needs to be pluggable - allow any kind of template
 
 ```ruby
-req.route do
-  req.on 'assets' do
-    # setting cache to true implies the following:
-    # - etag (calculated from file stat)
-    # - last-modified (from file stat)
-    # - vary: Accept-Encoding
+WEBSITE_PATH = File.join(__dir__, 'docs')
+STATIC_PATH = File.join(WEBSITE_PATH, 'static')
+LAYOUTS_PATH = File.join(WEBSITE_PATH, '_layouts')
 
-    # before responding, looks at the following headers
-    # if-modified-since: (date from client's cache)
-    # if-none-match: (etag from client's cache)
-    # cache-control: no-cache will prevent caching
-    req.serve_file(path, base_path: STATIC_PATH, cache: true)
+PAGES = Tipi::PageManager(
+  base_path: WEBSITE_PATH,
+  engine: :markdown,
+  layouts: LAYOUTS_PATH
+)
 
-    # We can control this manually instead:
-    req.serve_file(path, base_path: STATIC_PATH, cache: {
-      etag: 'blahblah',
-      last_modified: Time.now - 365*86400,
-      vary: 'Accept-Encoding, User-Agent'
-    })
+app = Tipi.app do |r|
+  r.on 'static' do
+    r.serve_file(r.routing_path, base_path: ASSETS_PATH)
+  end
+
+  r.default do
+    PAGES.serve(r)
   end
 end
 ```
 
-So, the algorithm:
+## Rewriting URLs
 
 ```ruby
-def validate_client_cache(path)
-  return false if headers['cache-control'] == 'no-cache'
-  
-  stat = File.stat(path)
-  etag = file_stat_to_etag(path, stat)
-  return false if headers['if-none-match'] != etag
+app = Tipi.app do |r|
+  r.rewrite '/' => '/docs/index.html'
+  r.rewrite '/docs' => '/docs/'
+  r.rewrite '/docs/' => '/docs/index.html'
 
-  modified = file_stat_to_modified_stamp(stat)
-  return false if headers['if-modified-since'] != modified
-
-  true
+  # or maybe
+  r.on '/docs/'
 end
-
-def file_stat_to_etag(path, stat)
-  "#{stat.mtime.to_i.to_s(36)}#{stat.size.to_s(36)}"
-end
-
-require 'time'
-
-def file_stat_to_modified_stamp(stat)
-  stat.mtime.httpdate
-end
-```
-
-## response compression
-
-```ruby
-req.route do
-  req.on 'assets' do
-    # gzip on the fly
-    req.serve_file(path, base_path: STATIC_PATH, gzip: :gzip)
-  end
-end
-
 ```
