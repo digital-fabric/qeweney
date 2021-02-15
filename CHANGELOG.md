@@ -1,3 +1,7 @@
+## 0.5 2021-02-15
+
+- Implement upgrade and WebSocket upgrade responses
+
 ## 0.4 2021-02-12
 
 - Implement caching and compression for serving static files
