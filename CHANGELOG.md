@@ -1,3 +1,8 @@
+## 0.6 2021-03-03
+
+- More work on routing (still WIP)
+- Implement two-way Rack adapters
+
 ## 0.5 2021-02-15
 
 - Implement upgrade and WebSocket upgrade responses
