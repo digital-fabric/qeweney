@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency  'rake',               '~>12.3.3'
   s.add_development_dependency  'minitest',           '~>5.11.3'
   s.add_development_dependency  'minitest-reporters', '~>1.4.2'
+  s.add_development_dependency  'benchmark-ips',      '~>2.8.3'
 end

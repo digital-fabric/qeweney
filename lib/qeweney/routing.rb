@@ -3,6 +3,7 @@
 module Qeweney
   module RoutingMethods
     def route(&block)
+      (@path_parts ||= path.split('/'))[@path_parts_idx ||= 1]
       res = catch(:stop) { yield self }
       return if res == :found
   
@@ -16,31 +17,34 @@ module Qeweney
 
     @@regexp_cache = {}
 
-    def routing_path
-      @__routing_path__
+    def current_path_part
+      (@path_parts ||= path.split('/'))[@path_parts_idx ||= 1]
     end
-  
+
+    def enter_route
+      @path_parts_idx += 1
+    end
+
+    def leave_route
+      @path_parts_idx -= 1
+    end
+
     def on(route = nil, &block)
-      @__routing_path__ ||= path
-
       if route
-        regexp = (@@regexp_cache[route] ||= /^\/#{route}(\/.*)?/)
-        return unless @__routing_path__ =~ regexp
-
-        @__routing_path__ = Regexp.last_match(1) || '/'
+        return unless @path_parts[@path_parts_idx] == route
       end
   
       route_found(&block)
     end
 
     def is(route = '/', &block)
-      return unless @__routing_path__ == route
+      return unless @path_parts[@path_parts_idx] == route && @path_parts_idx >= @path_parts.size
 
       route_found(&block)
     end
 
     def on_root(&block)
-      return unless @__routing_path__ == '/'
+      return unless @path_parts_idx >= @path_parts.size - 1
 
       route_found(&block)
     end
