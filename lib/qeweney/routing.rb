@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Qeweney
+  def self.route(&block)
+    ->(r) { r.route(&block) }
+  end
+
   module RoutingMethods
     def route(&block)
       (@path_parts ||= path.split('/'))[@path_parts_idx ||= 1]
@@ -12,13 +16,13 @@ module Qeweney
 
     def route_found(&block)
       catch(:stop, &block)
-      throw :stop, :found
+      throw :stop, headers_sent? ? :found : nil
     end
 
     @@regexp_cache = {}
 
-    def current_path_part
-      (@path_parts ||= path.split('/'))[@path_parts_idx ||= 1]
+    def route_part
+      @path_parts[@path_parts_idx]
     end
 
     def enter_route
@@ -34,7 +38,9 @@ module Qeweney
         return unless @path_parts[@path_parts_idx] == route
       end
   
+      enter_route
       route_found(&block)
+      leave_route
     end
 
     def is(route = '/', &block)
@@ -44,7 +50,7 @@ module Qeweney
     end
 
     def on_root(&block)
-      return unless @path_parts_idx >= @path_parts.size - 1
+      return unless @path_parts_idx > @path_parts.size - 1
 
       route_found(&block)
     end

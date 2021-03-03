@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Qeweney  
+module Qeweney
 end
 
 require_relative 'qeweney/request.rb'

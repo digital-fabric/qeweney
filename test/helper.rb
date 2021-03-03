@@ -24,6 +24,8 @@ module Qeweney
   end
 
   def self.mock(headers = {})
+    headers[':method'] ||= ''
+    headers[':path'] ||= ''
     Request.new(headers, MockAdapter.new)
   end
 
