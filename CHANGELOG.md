@@ -1,4 +1,4 @@
-## 0.7 20921-03-04
+## 0.7.1 20921-03-04
 
 - Add `#route_relative_path` method
 
