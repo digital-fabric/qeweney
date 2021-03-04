@@ -58,7 +58,7 @@ PAGES = Tipi::PageManager(
 
 app = Tipi.app do |r|
   r.on 'static' do
-    r.serve_file(r.routing_path, base_path: ASSETS_PATH)
+    r.serve_file(r.route_path, base_path: ASSETS_PATH)
   end
 
   r.default do

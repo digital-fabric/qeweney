@@ -72,4 +72,27 @@ class RoutingTest < MiniTest::Test
     app.(r)
     assert_equal [[:respond, 'baz root', {}]], r.response_calls
   end
+
+  def test_relative_path
+    app = Qeweney.route do |r|
+      r.on_root { r.respond('root') }
+      r.on('foo') { r.respond(File.join('FOO', r.route_relative_path)) }
+      r.on('bar') { 
+        r.on('baz') { r.respond(File.join('BAR/BAZ', r.route_relative_path)) }
+        r.default { r.respond(File.join('BAR', r.route_relative_path)) }
+      }
+    end
+
+    r = Qeweney.mock(':path' => '/foo/bar/baz')
+    app.(r)
+    assert_equal [[:respond, 'FOO/bar/baz', {}]], r.response_calls
+
+    r = Qeweney.mock(':path' => '/bar/a/b/c')
+    app.(r)
+    assert_equal [[:respond, 'BAR/a/b/c', {}]], r.response_calls
+
+    r = Qeweney.mock(':path' => '/bar/baz/b/c')
+    app.(r)
+    assert_equal [[:respond, 'BAR/BAZ/b/c', {}]], r.response_calls
+  end
 end

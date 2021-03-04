@@ -25,6 +25,10 @@ module Qeweney
       @path_parts[@path_parts_idx]
     end
 
+    def route_relative_path
+      @path_parts[@path_parts_idx..-1].join('/')
+    end
+
     def enter_route
       @path_parts_idx += 1
     end
