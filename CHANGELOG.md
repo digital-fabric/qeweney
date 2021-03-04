@@ -1,3 +1,7 @@
+## 0.7 20921-03-04
+
+- Add `#route_relative_path` method
+
 ## 0.6 2021-03-03
 
 - More work on routing (still WIP)
