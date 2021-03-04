@@ -26,7 +26,7 @@ module Qeweney
     end
 
     def route_relative_path
-      @path_parts.empty? ? '/' : @path_parts[@path_parts_idx..-1].join('/')
+      @path_parts.empty? ? '/' : "/#{@path_parts[@path_parts_idx..-1].join('/')}"
     end
 
     def enter_route
