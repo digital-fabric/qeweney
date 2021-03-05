@@ -138,7 +138,7 @@ module Qeweney
     MAX_PARAMETER_VALUE_SIZE = 2**20 # 1MB
 
     def parse_urlencoded_form_data(body)
-      body.force_encoding(UTF_8) unless body.encoding == Encoding::UTF_8
+      body.force_encoding(Encoding::UTF_8) unless body.encoding == Encoding::UTF_8
       body.split('&').each_with_object({}) do |i, m|
         raise 'Invalid parameter format' unless i =~ PARAMETER_RE
   

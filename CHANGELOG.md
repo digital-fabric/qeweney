@@ -1,3 +1,7 @@
+## 0.7.3 2021-03-05
+
+- Fix `parse_urlencoded_form_data`
+
 ## 0.7.2 2021-03-04
 
 - Add `#route_relative_path` method
