@@ -20,4 +20,26 @@ class RequestInfoTest < MiniTest::Test
     r = Qeweney.mock('host' => 'my.example.com')
     assert_equal 'my.example.com', r.host
   end
+
+  def test_full_uri
+    r = Qeweney.mock(
+      ':scheme' => 'https',
+      'host' => 'foo.bar',
+      ':path' => '/hey?a=b&c=d'
+    )
+
+    assert_equal 'https://foo.bar/hey?a=b&c=d', r.full_uri
+  end
+
+  def test_cookies
+    r = Qeweney.mock(
+      'cookie' => 'uaid=a%2Fb; lastLocus=settings; signin_ref=/'
+    )
+
+    assert_equal({
+      'uaid' => 'a/b',
+      'lastLocus' => 'settings',
+      'signin_ref' => '/'
+    }, r.cookies)
+  end
 end

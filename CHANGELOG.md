@@ -1,3 +1,6 @@
+- Add `Request#cookies`
+- Add `Request#full_uri`
+
 ## 0.7.3 2021-03-05
 
 - Fix `parse_urlencoded_form_data`

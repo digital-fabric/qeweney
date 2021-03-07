@@ -37,6 +37,10 @@ module Qeweney
       @uri ||= URI.parse(@headers[':path'] || '')
     end
     
+    def full_uri
+      @full_uri = "#{scheme}://#{host}#{uri}"
+    end
+    
     def path
       @path ||= uri.path
     end
@@ -73,6 +77,22 @@ module Qeweney
       return [] unless encoding
 
       encoding.split(',').map { |i| i.strip }
+    end
+
+    def cookies
+      @cookies ||= parse_cookies(headers['cookie'])
+    end
+
+    COOKIE_RE = /^([^=]+)=(.*)$/.freeze
+    SEMICOLON = ';'
+  
+    def parse_cookies(cookies)
+      cookies.split(SEMICOLON).each_with_object({}) do |c, h|
+        raise BadRequestError, 'Invalid cookie format' unless c.strip =~ COOKIE_RE
+  
+        key, value = Regexp.last_match[1..2]
+        h[key] = EscapeUtils.unescape_uri(value)
+      end
     end
   end
 
