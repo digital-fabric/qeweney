@@ -1,3 +1,5 @@
+## 0.7.4 2021-03-07
+
 - Add `Request#cookies`
 - Add `Request#full_uri`
 
