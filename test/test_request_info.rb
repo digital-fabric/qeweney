@@ -32,6 +32,10 @@ class RequestInfoTest < MiniTest::Test
   end
 
   def test_cookies
+    r = Qeweney.mock
+
+    assert_equal({}, r.cookies)
+
     r = Qeweney.mock(
       'cookie' => 'uaid=a%2Fb; lastLocus=settings; signin_ref=/'
     )

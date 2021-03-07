@@ -87,6 +87,8 @@ module Qeweney
     SEMICOLON = ';'
   
     def parse_cookies(cookies)
+      return {} unless cookies
+
       cookies.split(SEMICOLON).each_with_object({}) do |c, h|
         raise BadRequestError, 'Invalid cookie format' unless c.strip =~ COOKIE_RE
   
