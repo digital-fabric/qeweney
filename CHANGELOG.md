@@ -1,3 +1,7 @@
+## 0.7.5 2021-03-08
+
+- Set content-type header in 
+
 ## 0.7.4 2021-03-07
 
 - Add `Request#cookies`
