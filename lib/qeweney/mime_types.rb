@@ -7,7 +7,7 @@ module Qeweney
       'html'  => 'text/html',
       'css'   => 'text/css',
       'js'    => 'application/javascript',
-      'txt'   => 'text/plain'
+      'txt'   => 'text/plain',
 
       'gif'   => 'image/gif',
       'jpg'   => 'image/jpeg',
@@ -19,7 +19,7 @@ module Qeweney
       'json'  => 'application/json',
     }.freeze
 
-    def [](ref)
+    def self.[](ref)
       case ref
       when Symbol
         TYPES[ref.to_s]

@@ -6,6 +6,7 @@ require 'stringio'
 require 'digest/sha1'
 
 require_relative 'status'
+require_relative 'mime_types'
 
 module Qeweney
   module StaticFileCaching
@@ -59,7 +60,7 @@ module Qeweney
       redirect(secure_uri, status)
     end
 
-    def serve_file(path, opts)
+    def serve_file(path, opts = {})
       full_path = file_full_path(path, opts)
       stat = File.stat(full_path)
       etag = StaticFileCaching.file_stat_to_etag(stat)
@@ -72,17 +73,23 @@ module Qeweney
         })
       end
 
+      (opts[:headers] ||= {})['Content-Type'] ||= Qeweney::MimeTypes[File.extname(path)]
       respond_with_static_file(full_path, etag, last_modified, opts)
     rescue Errno::ENOENT => e
       respond(nil, ':status' => Status::NOT_FOUND)
     end
 
     def respond_with_static_file(path, etag, last_modified, opts)
+      cache_headers = {
+        'etag' => etag,
+        'last-modified' => last_modified,
+      }
       File.open(path, 'r') do |f|
-        opts = opts.merge(headers: {
-          'etag' => etag,
-          'last-modified' => last_modified,
-        })
+        if opts[:headers]
+          opts[:headers].merge!(cache_headers)
+        else
+          opts[:headers] = cache_headers
+        end
 
         # accept_encoding should return encodings in client's order of preference
         accept_encoding.each do |encoding|
