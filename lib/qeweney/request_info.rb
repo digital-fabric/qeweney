@@ -101,10 +101,10 @@ module Qeweney
   module RequestInfoClassMethods
     def parse_form_data(body, headers)
       case (content_type = headers['content-type'])
-      when /multipart\/form\-data; boundary=([^\s]+)/
+      when /^multipart\/form\-data; boundary=([^\s]+)/
         boundary = "--#{Regexp.last_match(1)}"
         parse_multipart_form_data(body, boundary)
-      when 'application/x-www-form-urlencoded'
+      when /^application\/x-www-form-urlencoded/
         parse_urlencoded_form_data(body)
       else
         raise "Unsupported form data content type: #{content_type}"
