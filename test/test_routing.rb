@@ -19,27 +19,27 @@ class RoutingTest < MiniTest::Test
   def test_app1
     r = Qeweney.mock(':path' => '/foo')
     App1.(r)
-    assert_equal [[:respond, nil, { ':status' => 404 }]], r.response_calls
+    assert_equal [[:respond, r, nil, { ':status' => 404 }]], r.response_calls
 
     r = Qeweney.mock(':path' => '/')
     App1.(r)
-    assert_equal [[:respond, nil, { ':status' => 302, 'Location' => '/hello' }]], r.response_calls
+    assert_equal [[:respond, r, nil, { ':status' => 302, 'Location' => '/hello' }]], r.response_calls
 
     r = Qeweney.mock(':path' => '/hello', ':method' => 'foo')
     App1.(r)
-    assert_equal [[:respond, nil, { ':status' => 404 }]], r.response_calls
+    assert_equal [[:respond, r, nil, { ':status' => 404 }]], r.response_calls
 
     r = Qeweney.mock(':path' => '/hello', ':method' => 'get')
     App1.(r)
-    assert_equal [[:respond, 'Hello', {}]], r.response_calls
+    assert_equal [[:respond, r, 'Hello', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/hello', ':method' => 'post')
     App1.(r)
-    assert_equal [[:respond, nil, { ':status' => 302, 'Location' => '/' }]], r.response_calls
+    assert_equal [[:respond, r, nil, { ':status' => 302, 'Location' => '/' }]], r.response_calls
 
     r = Qeweney.mock(':path' => '/hello/world', ':method' => 'get')
     App1.(r)
-    assert_equal [[:respond, 'Hello world', {}]], r.response_calls
+    assert_equal [[:respond, r, 'Hello world', {}]], r.response_calls
   end
 
   def test_on_root
@@ -58,19 +58,19 @@ class RoutingTest < MiniTest::Test
 
     r = Qeweney.mock(':path' => '/')
     app.(r)
-    assert_equal [[:respond, 'root', {}]], r.response_calls
+    assert_equal [[:respond, r, 'root', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/foo')
     app.(r)
-    assert_equal [[:respond, 'foo root', {}]], r.response_calls
+    assert_equal [[:respond, r, 'foo root', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/foo/bar')
     app.(r)
-    assert_equal [[:respond, 'bar root', {}]], r.response_calls
+    assert_equal [[:respond, r, 'bar root', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/foo/bar/baz')
     app.(r)
-    assert_equal [[:respond, 'baz root', {}]], r.response_calls
+    assert_equal [[:respond, r, 'baz root', {}]], r.response_calls
   end
 
   def test_relative_path
@@ -90,27 +90,27 @@ class RoutingTest < MiniTest::Test
     r = Qeweney.mock(':path' => '/')
     app.(r)
     assert_equal '/', default_relative_path
-    assert_equal [[:respond, 'ROOT/', {}]], r.response_calls
+    assert_equal [[:respond, r, 'ROOT/', {}]], r.response_calls
 
 
     r = Qeweney.mock(':path' => '/foo/bar/baz')
     app.(r)
     assert_equal '/foo/bar/baz', default_relative_path
-    assert_equal [[:respond, 'FOO/bar/baz', {}]], r.response_calls
+    assert_equal [[:respond, r, 'FOO/bar/baz', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/bar/a/b/c')
     app.(r)
     assert_equal '/bar/a/b/c', default_relative_path
-    assert_equal [[:respond, 'BAR/a/b/c', {}]], r.response_calls
+    assert_equal [[:respond, r, 'BAR/a/b/c', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/bar/baz/b/c')
     app.(r)
     assert_equal '/bar/baz/b/c', default_relative_path
-    assert_equal [[:respond, 'BAR/BAZ/b/c', {}]], r.response_calls
+    assert_equal [[:respond, r, 'BAR/BAZ/b/c', {}]], r.response_calls
 
     r = Qeweney.mock(':path' => '/baz/d/e/f')
     app.(r)
     assert_equal '/baz/d/e/f', default_relative_path
-    assert_equal [[:respond, '/d/e/f', {}]], r.response_calls
+    assert_equal [[:respond, r, '/d/e/f', {}]], r.response_calls
   end
 end

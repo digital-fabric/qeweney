@@ -159,6 +159,7 @@ module Qeweney
 
       # TODO: send separate chunks for multi-part body
       # TODO: add support for streaming body
+      # TODO: add support for websocket
     end
   end
 end

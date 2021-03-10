@@ -8,7 +8,7 @@ class RedirectTest < MiniTest::Test
     r.redirect('/foo')
 
     assert_equal [
-      [:respond, nil, {":status"=>302, "Location"=>"/foo"}]
+      [:respond, r, nil, {":status"=>302, "Location"=>"/foo"}]
     ], r.response_calls
   end
 
@@ -17,7 +17,7 @@ class RedirectTest < MiniTest::Test
     r.redirect('/bar', Qeweney::Status::MOVED_PERMANENTLY)
 
     assert_equal [
-      [:respond, nil, {":status"=>301, "Location"=>"/bar"}]
+      [:respond, r, nil, {":status"=>301, "Location"=>"/bar"}]
     ], r.response_calls
   end
 end
@@ -37,7 +37,7 @@ class StaticFileResponeTest < MiniTest::Test
     r.serve_file('helper.rb', base_path: __dir__)
 
     assert_equal [
-      [:respond, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
+      [:respond, r, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
     ], r.response_calls
   end
 
@@ -45,25 +45,25 @@ class StaticFileResponeTest < MiniTest::Test
     r = Qeweney.mock('if-none-match' => @etag)
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
-      [:respond, nil, { 'etag' => @etag, ':status' => Qeweney::Status::NOT_MODIFIED }]
+      [:respond, r, nil, { 'etag' => @etag, ':status' => Qeweney::Status::NOT_MODIFIED }]
     ], r.response_calls
 
     r = Qeweney.mock('if-modified-since' => @last_modified)
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
-      [:respond, nil, { 'etag' => @etag, ':status' => Qeweney::Status::NOT_MODIFIED }]
+      [:respond, r, nil, { 'etag' => @etag, ':status' => Qeweney::Status::NOT_MODIFIED }]
     ], r.response_calls
 
     r = Qeweney.mock('if-none-match' => 'foobar')
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
-      [:respond, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
+      [:respond, r, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
     ], r.response_calls
 
     r = Qeweney.mock('if-modified-since' => Time.now.httpdate)
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
-      [:respond, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
+      [:respond, r, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
     ], r.response_calls
   end
 
@@ -75,7 +75,7 @@ class StaticFileResponeTest < MiniTest::Test
     deflated_content = deflate.deflate(@content, Zlib::FINISH)
     
     assert_equal [
-      [:respond, deflated_content, {
+      [:respond, r, deflated_content, {
         'etag' => @etag,
         'last-modified' => @last_modified,
         'vary' => 'Accept-Encoding',
@@ -96,7 +96,7 @@ class StaticFileResponeTest < MiniTest::Test
     gzipped_content = buf.string
     
     assert_equal [
-      [:respond, gzipped_content, {
+      [:respond, r, gzipped_content, {
         'etag' => @etag,
         'last-modified' => @last_modified,
         'vary' => 'Accept-Encoding',
@@ -109,7 +109,7 @@ class StaticFileResponeTest < MiniTest::Test
     r = Qeweney.mock
     r.serve_file('foo.rb', base_path: __dir__)
     assert_equal [
-      [:respond, nil, { ':status' => Qeweney::Status::NOT_FOUND }]
+      [:respond, r, nil, { ':status' => Qeweney::Status::NOT_FOUND }]
     ], r.response_calls
   end
 end
@@ -120,7 +120,7 @@ class UpgradeTest < MiniTest::Test
     r.upgrade('df')
 
     assert_equal [
-      [:respond, nil, {
+      [:respond, r, nil, {
         ':status' => 101,
         'Upgrade' => 'df',
         'Connection' => 'upgrade'
@@ -132,7 +132,7 @@ class UpgradeTest < MiniTest::Test
     r.upgrade('df', { 'foo' => 'bar' })
 
     assert_equal [
-      [:respond, nil, {
+      [:respond, r, nil, {
         ':status' => 101,
         'Upgrade' => 'df',
         'Connection' => 'upgrade',
@@ -155,7 +155,7 @@ class UpgradeTest < MiniTest::Test
     accept = Digest::SHA1.base64digest('abcdefghij258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
 
     assert_equal [
-      [:respond, nil, {
+      [:respond, r, nil, {
         ':status' => 101,
         'Upgrade' => 'websocket',
         'Connection' => 'upgrade',
@@ -179,7 +179,7 @@ class ServeRackTest < MiniTest::Test
     })
 
     assert_equal [
-      [:respond, "get /foo/bar", {':status' => 404, 'Foo' => 'Bar' }]
+      [:respond, r, 'get /foo/bar', {':status' => 404, 'Foo' => 'Bar' }]
     ], r.response_calls
   end
 end

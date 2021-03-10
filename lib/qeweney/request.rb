@@ -34,7 +34,7 @@ module Qeweney
         return chunk
       end
 
-      @message_complete ? nil : @adapter.get_body_chunk
+      @message_complete ? nil : @adapter.get_body_chunk(self)
     end
     
     def each_chunk
@@ -44,7 +44,7 @@ module Qeweney
         end
         @buffered_body_chunks = nil
       end
-      while !@message_complete && (chunk = @adapter.get_body_chunk)
+      while !@message_complete && (chunk = @adapter.get_body_chunk(self))
         yield chunk
       end
     end
@@ -59,7 +59,7 @@ module Qeweney
     end
     
     def consume
-      @adapter.consume_request
+      @adapter.consume_request(self)
     end
     
     def keep_alive?
@@ -68,7 +68,7 @@ module Qeweney
     
     def read
       buf = @buffered_body_chunks ? @buffered_body_chunks.join : nil
-      while (chunk = @adapter.get_body_chunk)
+      while (chunk = @adapter.get_body_chunk(self))
         (buf ||= +'') << chunk
       end
       @buffered_body_chunks = nil
@@ -77,7 +77,7 @@ module Qeweney
     alias_method :body, :read
     
     def respond(body, headers = {})
-      @adapter.respond(body, headers)
+      @adapter.respond(self, body, headers)
       @headers_sent = true
     end
     
@@ -85,24 +85,32 @@ module Qeweney
       return if @headers_sent
       
       @headers_sent = true
-      @adapter.send_headers(headers, empty_response: empty_response)
+      @adapter.send_headers(self, headers, empty_response: empty_response)
     end
     
     def send_chunk(body, done: false)
       send_headers({}) unless @headers_sent
       
-      @adapter.send_chunk(body, done: done)
+      @adapter.send_chunk(self, body, done: done)
     end
     alias_method :<<, :send_chunk
     
     def finish
       send_headers({}) unless @headers_sent
       
-      @adapter.finish
+      @adapter.finish(self)
     end
 
     def headers_sent?
       @headers_sent
+    end
+
+    def rx_incr(count)
+      headers[':rx'] ? headers[';rx'] += count : headers[':rx'] = count
+    end
+
+    def tx_incr(count)
+      headers[':tx'] ? headers[':tx'] += count : headers[':tx'] = count
     end
   end
 end

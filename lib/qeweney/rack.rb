@@ -32,20 +32,20 @@ module Qeweney
       headers
     end
 
-    def respond(body, headers)
+    def respond(req, body, headers)
       @response_body << body
       @response_headers = headers
     end
 
-    def send_headers(headers, empty_response: nil)
+    def send_headers(req, headers, empty_response: nil)
       @response_headers = headers
     end
 
-    def send_chunk(body, done: false)
+    def send_chunk(req, body, done: false)
       @response_body << body
     end
 
-    def finish
+    def finish(req)
     end
 
     def rack_response
