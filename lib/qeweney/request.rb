@@ -106,11 +106,19 @@ module Qeweney
     end
 
     def rx_incr(count)
-      headers[':rx'] ? headers[';rx'] += count : headers[':rx'] = count
+      headers[':rx'] ? headers[':rx'] += count : headers[':rx'] = count
     end
 
     def tx_incr(count)
       headers[':tx'] ? headers[':tx'] += count : headers[':tx'] = count
+    end
+
+    def transfer_counts
+      [headers[':rx'], headers[':tx']]
+    end
+
+    def total_transfer_count
+      (headers[':rx'] || 0) + (headers[':tx'] || 0)
     end
   end
 end
