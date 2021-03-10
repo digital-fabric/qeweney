@@ -1,6 +1,10 @@
+## 0.8 2021-03-10
+
+- Pass request as first argument to all adapter methods
+
 ## 0.7.5 2021-03-08
 
-- Set content-type header in 
+- Set content-type header in `#serve_file`
 
 ## 0.7.4 2021-03-07
 
