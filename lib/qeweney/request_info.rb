@@ -58,7 +58,6 @@ module Qeweney
     def split_query_string(query)
       query.split('&').each_with_object({}) do |kv, h|
         k, v = kv.split('=')
-        p split_query_string: { k: k, v: v }
         h[k.to_sym] = URI.decode_www_form_component(v)
       end
     end
