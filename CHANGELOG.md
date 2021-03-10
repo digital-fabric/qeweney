@@ -1,3 +1,8 @@
+## 0.8.1 2021-03-10
+
+- Add `Request#transfer_counts`, `Request#total_transfer`
+- Fix `Request#rx_incr`
+
 ## 0.8 2021-03-10
 
 - Pass request as first argument to all adapter methods

@@ -117,7 +117,7 @@ module Qeweney
       [headers[':rx'], headers[':tx']]
     end
 
-    def total_transfer_count
+    def total_transfer
       (headers[':rx'] || 0) + (headers[':tx'] || 0)
     end
   end
