@@ -1,3 +1,7 @@
+## 0.8.2 2021-03-17
+
+- Fix form parsing when charset is specified
+
 ## 0.8.1 2021-03-10
 
 - Add `Request#transfer_counts`, `Request#total_transfer`
