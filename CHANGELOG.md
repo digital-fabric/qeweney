@@ -1,3 +1,8 @@
+## 0.8.3 2021-03-22
+
+- Streamline routing behaviour in sub routes (an explicit default sub route is
+  now required if no sub route matches).
+
 ## 0.8.2 2021-03-17
 
 - Fix form parsing when charset is specified
