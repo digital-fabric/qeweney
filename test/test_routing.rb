@@ -12,6 +12,7 @@ class RoutingTest < MiniTest::Test
         r.on_post do
           r.redirect '/'
         end
+        r.default { r.respond nil, ':status' => 404 }
       end
     end
   end

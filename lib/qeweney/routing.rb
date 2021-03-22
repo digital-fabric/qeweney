@@ -16,7 +16,7 @@ module Qeweney
 
     def route_found(&block)
       catch(:stop, &block)
-      throw :stop, headers_sent? ? :found : nil
+      throw :stop, :found
     end
 
     @@regexp_cache = {}
