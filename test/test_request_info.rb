@@ -13,6 +13,16 @@ class RequestInfoTest < MiniTest::Test
     assert_equal({ a: '1', b: '2', c: '3/4' }, r.query)
   end
 
+  def test_query
+    r = Qeweney.mock(':path' => '/GponForm/diag_Form?images/')
+    assert_equal '/GponForm/diag_Form', r.path
+    assert_equal({:'images/' => true}, r.query)
+
+    r = Qeweney.mock(':path' => '/?a=1&b=2')
+    assert_equal '/', r.path
+    assert_equal({a: '1', b: '2'}, r.query)
+  end
+
   def test_host
     r = Qeweney.mock(':path' => '/')
     assert_nil r.host

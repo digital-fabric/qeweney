@@ -52,13 +52,13 @@ module Qeweney
     def query
       return @query if @query
       
-      @query = (q = uri.query) ? split_query_string(q) : {}
+      @query = (q = uri.query) ? parse_query(q) : {}
     end
     
-    def split_query_string(query)
+    def parse_query(query)
       query.split('&').each_with_object({}) do |kv, h|
         k, v = kv.split('=')
-        h[k.to_sym] = URI.decode_www_form_component(v)
+        h[k.to_sym] = v ? URI.decode_www_form_component(v) : true
       end
     end
 
