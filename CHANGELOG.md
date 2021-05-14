@@ -1,3 +1,7 @@
+## 0.9.0 2021-05-14
+
+- Fix query parsing for fields with empty value
+
 ## 0.8.4 2021-03-23
 
 - Rename and fix `#parse_query` to deal with no-value query parts
