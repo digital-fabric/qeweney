@@ -21,6 +21,9 @@ class RequestInfoTest < MiniTest::Test
     r = Qeweney.mock(':path' => '/?a=1&b=2')
     assert_equal '/', r.path
     assert_equal({a: '1', b: '2'}, r.query)
+
+    r = Qeweney.mock(':path' => '/?l=a&t=&x=42')
+    assert_equal({l: 'a', t: '', x: '42'}, r.query)
   end
 
   def test_host
