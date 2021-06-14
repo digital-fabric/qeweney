@@ -1,3 +1,7 @@
+## 0.9.1 2021-06-14
+
+- Fix reading host from `:authority` header
+
 ## 0.9.0 2021-05-14
 
 - Fix query parsing for fields with empty value
