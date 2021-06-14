@@ -6,8 +6,9 @@ require 'escape_utils'
 module Qeweney
   module RequestInfoMethods
     def host
-      @headers['host']
+      @headers['host'] || @headers[':authority']
     end
+    alias_method :authority, :host
 
     def connection
       @headers['connection']

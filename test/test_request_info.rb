@@ -29,9 +29,15 @@ class RequestInfoTest < MiniTest::Test
   def test_host
     r = Qeweney.mock(':path' => '/')
     assert_nil r.host
+    assert_nil r.authority
 
     r = Qeweney.mock('host' => 'my.example.com')
     assert_equal 'my.example.com', r.host
+    assert_equal 'my.example.com', r.authority
+
+    r = Qeweney.mock(':authority' => 'my.foo.com')
+    assert_equal 'my.foo.com', r.host
+    assert_equal 'my.foo.com', r.authority
   end
 
   def test_full_uri
