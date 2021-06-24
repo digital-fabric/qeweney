@@ -19,12 +19,16 @@ module Qeweney
       'json'  => 'application/json',
     }.freeze
 
+    EXT_REGEXP = /\.?([^\.]+)$/.freeze
+
     def self.[](ref)
       case ref
       when Symbol
         TYPES[ref.to_s]
-      when /\.?([^\.]+)$/
+      when EXT_REGEXP
         TYPES[Regexp.last_match(1)]
+      when ''
+        nil
       else
         raise "Invalid argument #{ref.inspect}"
       end
