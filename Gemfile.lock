@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    qeweney (0.9.1)
+    qeweney (0.10)
       escape_utils (~> 1.2.1)
 
 GEM

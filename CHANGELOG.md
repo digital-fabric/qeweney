@@ -1,3 +1,8 @@
+## 0.10.0 2021-06-24
+
+- Include file stat in `#serve_io` options as hint for adapter
+- Fix `MimeTypes#[]` for empty extension
+
 ## 0.9.1 2021-06-14
 
 - Fix reading host from `:authority` header
