@@ -74,6 +74,7 @@ module Qeweney
       end
 
       mime_type = Qeweney::MimeTypes[File.extname(path)]
+      opts[:stat] = stat
       (opts[:headers] ||= {})['Content-Type'] ||= mime_type if mime_type
 
       respond_with_static_file(full_path, etag, last_modified, opts)
