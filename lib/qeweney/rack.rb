@@ -69,7 +69,7 @@ module Qeweney
 
   def self.rack_env_from_request(request)
     Hash.new do |h, k|
-      h[k] = env_value_from_request(request, k)
+      h[k] = rack_env_value_from_request(request, k)
     end
   end
 
@@ -92,7 +92,7 @@ module Qeweney
   
   HTTP_HEADER_RE = /^HTTP_(.+)$/.freeze
 
-  def self.env_value_from_request(request, key)
+  def self.rack_env_value_from_request(request, key)
     case key
     when 'REQUEST_METHOD' then request.method.upcase
     when 'PATH_INFO'      then request.path
