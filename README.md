@@ -1,4 +1,8 @@
-# Qeweney
+# Qeweney - add water, makes its own sauce!
+
+[![Gem Version](https://badge.fury.io/rb/qeweney.svg)](http://rubygems.org/gems/qeweney)
+[![Modulation Test](https://github.com/digital-fabric/qeweney/workflows/Tests/badge.svg)](https://github.com/digital-fabric/qeweney/actions?query=workflow%3ATests)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/digital-fabric/qeweney/blob/master/LICENSE)
 
 ## Cross-library HTTP request / response API for servers
 
