@@ -179,7 +179,7 @@ class ServeRackTest < MiniTest::Test
     })
 
     assert_equal [
-      [:respond, r, 'get /foo/bar', {':status' => 404, 'Foo' => 'Bar' }]
+      [:respond, r, 'GET /foo/bar', {':status' => 404, 'Foo' => 'Bar' }]
     ], r.response_calls
   end
 end
