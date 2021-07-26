@@ -1,4 +1,8 @@
-## 0.10.0 2021-06-24
+## 0.11 2021-07-26
+
+- Fix rack env (digital-fabric/tipi#11)
+
+## 0.10 2021-06-24
 
 - Include file stat in `#serve_io` options as hint for adapter
 - Fix `MimeTypes#[]` for empty extension
