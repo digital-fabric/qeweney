@@ -67,12 +67,33 @@ module Qeweney
     end
   end
 
+  # TODO: integrate in env
+  # Implements a rack input stream:
+  # https://www.rubydoc.info/github/rack/rack/master/file/SPEC#label-The+Input+Stream
+  class InputStream
+    def initialize(request)
+      @request = request
+    end
+      
+    def gets; end
+      
+    def read(length = nil, outbuf = nil); end
+      
+    def each(&block)
+      @request.each_chunk(&block)
+    end
+      
+    def rewind; end
+  end
+
   def self.rack_env_from_request(request)
     Hash.new do |h, k|
       h[k] = rack_env_value_from_request(request, k)
     end
   end
 
+  # TODO: improve conformance to rack spec
+  # TODO: set values like port, scheme etc from actual connection
   RACK_ENV = {
     'SCRIPT_NAME'                    => '',
     'rack.version'                   => [1, 3],
