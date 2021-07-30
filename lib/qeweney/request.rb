@@ -34,7 +34,7 @@ module Qeweney
         return chunk
       end
 
-      @message_complete ? nil : @adapter.get_body_chunk(self)
+      @adapter.get_body_chunk(self)
     end
     
     def each_chunk
@@ -44,35 +44,17 @@ module Qeweney
         end
         @buffered_body_chunks = nil
       end
-      while !@message_complete && (chunk = @adapter.get_body_chunk(self))
+      while (chunk = @adapter.get_body_chunk(self))
         yield chunk
       end
     end
 
-    def complete!(keep_alive = nil)
-      @message_complete = true
-      @keep_alive = keep_alive
-    end
-    
-    def complete?
-      @message_complete
-    end
-    
     def consume
       @adapter.consume_request(self)
     end
     
-    def keep_alive?
-      @keep_alive
-    end
-    
     def read
-      buf = @buffered_body_chunks ? @buffered_body_chunks.join : nil
-      while (chunk = @adapter.get_body_chunk(self))
-        (buf ||= +'') << chunk
-      end
-      @buffered_body_chunks = nil
-      buf
+      @adapter.get_body(self)
     end
     alias_method :body, :read
     
