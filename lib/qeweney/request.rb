@@ -49,10 +49,6 @@ module Qeweney
       end
     end
 
-    def consume
-      @adapter.consume_request(self)
-    end
-    
     def read
       @adapter.get_body(self)
     end
