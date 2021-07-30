@@ -1,3 +1,8 @@
+## 0.12 2021-07-30
+
+- Remove `Request#consume` method
+- Remove `Request#complete?` and associated methods
+
 ## 0.11 2021-07-26
 
 - Fix rack env (digital-fabric/tipi#11)
