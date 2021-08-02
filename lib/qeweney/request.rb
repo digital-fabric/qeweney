@@ -55,6 +55,10 @@ module Qeweney
       @adapter.get_body(self)
     end
     alias_method :body, :read
+
+    def complete?
+      @adapter.complete?(self)
+    end
     
     def respond(body, headers = {})
       @adapter.respond(self, body, headers)
