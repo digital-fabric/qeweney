@@ -1,3 +1,8 @@
+## 0.13 2021-08-02
+
+- Restore `Request#complete?` method
+- Add buffered_only argument to `Request#next_chunk`
+
 ## 0.12 2021-07-30
 
 - Remove `Request#consume` method
