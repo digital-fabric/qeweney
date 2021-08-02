@@ -27,14 +27,16 @@ module Qeweney
       @buffered_body_chunks << chunk
     end
 
-    def next_chunk
+    def next_chunk(buffered_only = false)
       if @buffered_body_chunks
         chunk = @buffered_body_chunks.shift
         @buffered_body_chunks = nil if @buffered_body_chunks.empty?
         return chunk
+      elsif buffered_only
+        return nil
       end
 
-      @adapter.get_body_chunk(self)
+      @adapter.get_body_chunk(self, buffered_only)
     end
     
     def each_chunk
