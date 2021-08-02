@@ -52,6 +52,14 @@ module Qeweney
     end
 
     def read
+      if @buffered_body_chunks
+        body = @buffered_body_chunks.join
+        if !complete?
+          body << @adapter.get_body(self)
+        end
+        @buffered_body_chunks = nil
+        return body
+      end
       @adapter.get_body(self)
     end
     alias_method :body, :read
