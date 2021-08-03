@@ -55,7 +55,8 @@ module Qeweney
       if @buffered_body_chunks
         body = @buffered_body_chunks.join
         if !complete?
-          body << @adapter.get_body(self)
+          rest = @adapter.get_body(self)
+          body << rest if rest
         end
         @buffered_body_chunks = nil
         return body
