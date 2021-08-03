@@ -1,3 +1,7 @@
+## 0.13.1 2021-08-03
+
+- Fix `Request#read`
+
 ## 0.13 2021-08-02
 
 - Restore `Request#complete?` method
