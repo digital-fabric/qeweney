@@ -114,4 +114,16 @@ class RoutingTest < MiniTest::Test
     assert_equal '/baz/d/e/f', default_relative_path
     assert_equal [[:respond, r, '/d/e/f', {}]], r.response_calls
   end
+
+  def test_well_known
+    app = Qeweney.route do |r|
+      r.on('.well-known/acme-challenge') { r.respond(r.route_relative_path) }
+      r.default { r.respond('not found') }
+    end
+
+    r = Qeweney.mock(':path' => '/.well-known/acme-challenge/foo')
+    app.(r)
+    assert_equal [[:respond, r, '/foo', {}]], r.response_calls
+  end
 end
+

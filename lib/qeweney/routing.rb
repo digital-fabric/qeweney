@@ -29,22 +29,24 @@ module Qeweney
       @path_parts.empty? ? '/' : "/#{@path_parts[@path_parts_idx..-1].join('/')}"
     end
 
-    def enter_route
-      @path_parts_idx += 1
+    def enter_route(depth = 1)
+      @path_parts_idx += depth
     end
 
-    def leave_route
-      @path_parts_idx -= 1
+    def leave_route(depth = 1)
+      @path_parts_idx -= depth
     end
 
-    def on(route = nil, &block)
-      if route
-        return unless @path_parts[@path_parts_idx] == route
-      end
+    def on(route, &block)
+      return route_found(&block) unless route
+      
+      route_parts = route.split('/')
+      route_length = route_parts.size
+      return unless @path_parts[@path_parts_idx, route_length] == route_parts
   
-      enter_route
+      enter_route(route_length)
       route_found(&block)
-      leave_route
+      leave_route(route_length)
     end
 
     def is(route = '/', &block)
