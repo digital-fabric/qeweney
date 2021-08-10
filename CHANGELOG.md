@@ -1,3 +1,7 @@
+## 0.14 2021-08-10
+
+- Fix Request#on with paths containing slashes
+
 ## 0.13.1 2021-08-03
 
 - Fix `Request#read`
