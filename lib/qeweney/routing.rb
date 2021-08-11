@@ -124,6 +124,11 @@ module Qeweney
       on_upgrade('websocket', &block)
     end
 
+    def reject(body, status)
+      respond(body, ':status' => status)
+      throw :stop, :found
+    end
+
     def stop_routing
       throw :stop, :found
     end
