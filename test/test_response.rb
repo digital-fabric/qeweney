@@ -73,7 +73,7 @@ class StaticFileResponeTest < MiniTest::Test
 
     deflate = Zlib::Deflate.new
     deflated_content = deflate.deflate(@content, Zlib::FINISH)
-    
+
     assert_equal [
       [:respond, r, deflated_content, {
         'etag' => @etag,
@@ -94,7 +94,7 @@ class StaticFileResponeTest < MiniTest::Test
     z.flush
     z.close
     gzipped_content = buf.string
-    
+
     assert_equal [
       [:respond, r, gzipped_content, {
         'etag' => @etag,
@@ -127,7 +127,7 @@ class UpgradeTest < MiniTest::Test
       }]
     ], r.response_calls
 
-  
+
     r = Qeweney.mock
     r.upgrade('df', { 'foo' => 'bar' })
 
@@ -148,7 +148,7 @@ class UpgradeTest < MiniTest::Test
       'sec-websocket-version' => '23',
       'sec-websocket-key' => 'abcdefghij'
     )
-    
+
     assert_equal 'websocket', r.upgrade_protocol
 
     r.upgrade_to_websocket('foo' => 'baz')

@@ -81,7 +81,7 @@ class RoutingTest < MiniTest::Test
       default_relative_path = r.route_relative_path
       r.on_root { r.respond(File.join('ROOT', r.route_relative_path)) }
       r.on('foo') { r.respond(File.join('FOO', r.route_relative_path)) }
-      r.on('bar') { 
+      r.on('bar') {
         r.on('baz') { r.respond(File.join('BAR/BAZ', r.route_relative_path)) }
         r.default { r.respond(File.join('BAR', r.route_relative_path)) }
       }

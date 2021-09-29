@@ -14,7 +14,7 @@ module Qeweney
       def file_stat_to_etag(stat)
         "#{stat.mtime.to_i.to_s(36)}#{stat.size.to_s(36)}"
       end
-      
+
       def file_stat_to_last_modified(stat)
         stat.mtime.httpdate
       end
@@ -114,7 +114,7 @@ module Qeweney
       if (modified_since = headers['if-modified-since'])
         return true if modified_since == last_modified
       end
-    
+
       false
     end
 

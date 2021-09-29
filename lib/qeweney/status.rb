@@ -5,7 +5,7 @@ module Qeweney
   module Status
     # translated from https://golang.org/pkg/net/http/#pkg-constants
     # https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-    
+
     CONTINUE                        = 100 # RFC 7231, 6.2.1
     SWITCHING_PROTOCOLS             = 101 # RFC 7231, 6.2.2
     PROCESSING                      = 102 # RFC 2518, 10.1

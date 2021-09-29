@@ -16,12 +16,12 @@ module Qeweney
 
     attr_reader :headers, :adapter
     attr_accessor :__next__
-    
+
     def initialize(headers, adapter)
       @headers  = headers
       @adapter  = adapter
     end
-        
+
     def buffer_body_chunk(chunk)
       @buffered_body_chunks ||= []
       @buffered_body_chunks << chunk
@@ -38,7 +38,7 @@ module Qeweney
 
       @adapter.get_body_chunk(self, buffered_only)
     end
-    
+
     def each_chunk
       if @buffered_body_chunks
         while (chunk = @buffered_body_chunks.shift)
@@ -68,29 +68,29 @@ module Qeweney
     def complete?
       @adapter.complete?(self)
     end
-    
+
     def respond(body, headers = {})
       @adapter.respond(self, body, headers)
       @headers_sent = true
     end
-    
+
     def send_headers(headers = {}, empty_response = false)
       return if @headers_sent
-      
+
       @headers_sent = true
       @adapter.send_headers(self, headers, empty_response: empty_response)
     end
-    
+
     def send_chunk(body, done: false)
       send_headers({}) unless @headers_sent
-      
+
       @adapter.send_chunk(self, body, done: done)
     end
     alias_method :<<, :send_chunk
-    
+
     def finish
       send_headers({}) unless @headers_sent
-      
+
       @adapter.finish(self)
     end
 

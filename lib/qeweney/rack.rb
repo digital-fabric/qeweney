@@ -74,15 +74,15 @@ module Qeweney
     def initialize(request)
       @request = request
     end
-      
+
     def gets; end
-      
+
     def read(length = nil, outbuf = nil); end
-      
+
     def each(&block)
       @request.each_chunk(&block)
     end
-      
+
     def rewind; end
   end
 
@@ -110,7 +110,7 @@ module Qeweney
     'rack.multipart.buffer_size'     => nil,
     'rack.multipar.tempfile_factory' => nil
   }
-  
+
   HTTP_HEADER_RE = /^HTTP_(.+)$/.freeze
 
   def self.rack_env_value_from_request(request, key)

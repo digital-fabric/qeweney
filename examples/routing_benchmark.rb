@@ -104,7 +104,7 @@ OptimizedRubyApp = ->(r) do
       else
         return r.respond('Hello')
       end
-    elsif method == 'post' 
+    elsif method == 'post'
       # puts 'Someone said Hello'
       return r.redirect('/')
     end

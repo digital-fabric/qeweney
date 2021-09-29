@@ -10,7 +10,7 @@ module Qeweney
       (@path_parts ||= path.split('/'))[@path_parts_idx ||= 1]
       res = catch(:stop) { yield self }
       return if res == :found
-  
+
       respond(nil, ':status' => 404)
     end
 
@@ -39,11 +39,11 @@ module Qeweney
 
     def on(route, &block)
       return route_found(&block) unless route
-      
+
       route_parts = route.split('/')
       route_length = route_parts.size
       return unless @path_parts[@path_parts_idx, route_length] == route_parts
-  
+
       enter_route(route_length)
       route_found(&block)
       leave_route(route_length)
@@ -72,22 +72,22 @@ module Qeweney
 
       route_found(&block)
     end
-  
+
     def on_get(route = nil, &block)
       return unless method == 'get'
-  
+
       on(route, &block)
     end
-  
+
     def on_post(route = nil, &block)
       return unless method == 'post'
-  
+
       on(route, &block)
     end
 
     def on_options(route = nil, &block)
       return unless method == 'options'
-  
+
       on(route, &block)
     end
 
