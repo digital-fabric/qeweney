@@ -15,7 +15,6 @@ module Qeweney
     extend RequestInfoClassMethods
 
     attr_reader :headers, :adapter
-    attr_accessor :__next__
 
     def initialize(headers, adapter)
       @headers  = headers
