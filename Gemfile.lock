@@ -21,7 +21,7 @@ GEM
     ruby-progressbar (1.11.0)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   benchmark-ips (~> 2.8.3)
@@ -31,4 +31,4 @@ DEPENDENCIES
   rake (~> 12.3.3)
 
 BUNDLED WITH
-   2.1.4
+   2.3.3

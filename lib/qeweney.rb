@@ -5,4 +5,3 @@ end
 
 require_relative 'qeweney/request.rb'
 require_relative 'qeweney/status.rb'
-
