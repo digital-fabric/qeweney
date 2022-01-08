@@ -1,3 +1,8 @@
+## 0.15 2022-01-08
+
+- Add `TestAdapter` class for testing requests and responses
+- Add `RoutingMethods#reject` method
+
 ## 0.14 2021-08-10
 
 - Fix Request#on with paths containing slashes
