@@ -7,7 +7,8 @@ module Qeweney
 
   module RoutingMethods
     def route(&block)
-      (@path_parts ||= path.split('/'))[@path_parts_idx ||= 1]
+      @path_parts ||= path.split('/')
+      @path_parts_idx ||= 1
       res = catch(:stop) { yield self }
       return if res == :found
 
