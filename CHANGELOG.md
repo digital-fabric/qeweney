@@ -1,3 +1,8 @@
+## 0.16 2022-01-22
+
+- Use frozen empty hash as default headers in response methods
+- Add `text` key in registered MIME types
+
 ## 0.15 2022-01-08
 
 - Add `TestAdapter` class for testing requests and responses
