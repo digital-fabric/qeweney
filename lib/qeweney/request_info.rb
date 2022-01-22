@@ -61,7 +61,6 @@ module Qeweney
     def parse_query(query)
       query.split('&').each_with_object({}) do |kv, h|
         k, v = kv.match(QUERY_KV_REGEXP)[1..2]
-        # k, v = kv.split('=')
         h[k.to_sym] = v ? URI.decode_www_form_component(v) : true
       end
     end
