@@ -8,6 +8,7 @@ module Qeweney
       'css'   => 'text/css',
       'js'    => 'application/javascript',
       'txt'   => 'text/plain',
+      'text'  => 'text/plain',
 
       'gif'   => 'image/gif',
       'jpg'   => 'image/jpeg',
