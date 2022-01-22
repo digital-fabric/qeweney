@@ -68,12 +68,14 @@ module Qeweney
       @adapter.complete?(self)
     end
 
-    def respond(body, headers = {})
+    EMPTY_HEADERS = {}.freeze
+
+    def respond(body, headers = EMPTY_HEADERS)
       @adapter.respond(self, body, headers)
       @headers_sent = true
     end
 
-    def send_headers(headers = {}, empty_response = false)
+    def send_headers(headers = EMPTY_HEADERS, empty_response = false)
       return if @headers_sent
 
       @headers_sent = true
