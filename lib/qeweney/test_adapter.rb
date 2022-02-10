@@ -14,7 +14,7 @@ module Qeweney
     end
 
     def status
-      headers[':status']
+      headers[':status'] || Qeweney::Status::OK
     end
 
     def self.mock(headers = {})
