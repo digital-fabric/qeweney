@@ -1,3 +1,7 @@
+## 0.17 2022-02-10
+
+- Fix default return value in `TestAdapter#status`
+
 ## 0.16 2022-01-22
 
 - Use frozen empty hash as default headers in response methods
