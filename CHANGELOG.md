@@ -1,3 +1,7 @@
+## 0.18 2022-02-16
+
+- Implement `Request#rewrite!` (#2)
+
 ## 0.17 2022-02-10
 
 - Fix default return value in `TestAdapter#status`
