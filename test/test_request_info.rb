@@ -65,4 +65,26 @@ class RequestInfoTest < MiniTest::Test
       'signin_ref' => '/'
     }, r.cookies)
   end
+
+  def test_rewrite!
+    r = Qeweney.mock(
+      ':scheme' => 'https',
+      'host' => 'foo.bar',
+      ':path' => '/hey/ho?a=b&c=d'
+    )
+
+    assert_equal '/hey/ho', r.path
+    assert_equal URI.parse('/hey/ho?a=b&c=d'), r.uri
+    assert_equal 'https://foo.bar/hey/ho?a=b&c=d', r.full_uri
+
+    r.rewrite!('/hhh', '/')
+    assert_equal '/hey/ho', r.path
+    assert_equal URI.parse('/hey/ho?a=b&c=d'), r.uri
+    assert_equal 'https://foo.bar/hey/ho?a=b&c=d', r.full_uri
+
+    r.rewrite!('/hey', '/')
+    assert_equal '/ho', r.path
+    assert_equal URI.parse('/ho?a=b&c=d'), r.uri
+    assert_equal 'https://foo.bar/ho?a=b&c=d', r.full_uri
+  end
 end

@@ -34,6 +34,22 @@ module Qeweney
       @scheme ||= @headers[':scheme']
     end
 
+    # Rewrites the request path by replacing the given src with the given
+    # replacement.
+    #
+    # @param src [String, Regexp] src pattern
+    # @param replacement [String] replacement
+    # @return [Qeweney::Request] self
+    def rewrite!(src, replacement)
+      @headers[':path'] = @headers[':path']
+        .gsub(src, replacement)
+        .gsub('//', '/')
+      @path = nil
+      @uri = nil
+      @full_uri = nil
+      self
+    end
+
     def uri
       @uri ||= URI.parse(@headers[':path'] || '')
     end
