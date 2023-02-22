@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.author      = 'Sharon Rosner'
   s.email       = 'sharon@noteflakes.com'
   s.files       = `git ls-files`.split
-  s.homepage    = 'http://github.com/digital-fabric/qeweney'
+  s.homepage    = 'https://github.com/digital-fabric/qeweney'
   s.metadata    = {
     "source_code_uri" => "https://github.com/digital-fabric/qeweney"
   }
