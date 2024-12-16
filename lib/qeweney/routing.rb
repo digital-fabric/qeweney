@@ -92,12 +92,6 @@ module Qeweney
       on(route, &block)
     end
 
-    def on_upgrade(protocol, &block)
-      return unless upgrade_protocol == protocol
-
-      route_found(&block)
-    end
-
     def on_query_param(key)
       value = query[key]
       return unless value

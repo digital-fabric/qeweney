@@ -78,7 +78,7 @@ module Qeweney
       (opts[:headers] ||= {})['Content-Type'] ||= mime_type if mime_type
 
       respond_with_static_file(full_path, etag, last_modified, opts)
-    rescue Errno::ENOENT => e
+    rescue Errno::ENOENT
       respond(nil, ':status' => Status::NOT_FOUND)
     end
 
