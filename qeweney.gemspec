@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.required_ruby_version = '>= 2.6'
 
-  s.add_runtime_dependency      'escape_utils',       '~>1.2.1'
+  s.add_runtime_dependency      'escape_utils',       '~>1.3'
 
   s.add_development_dependency  'rake',               '~>12.3.3'
   s.add_development_dependency  'minitest',           '~>5.11.3'
