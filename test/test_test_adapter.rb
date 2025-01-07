@@ -3,7 +3,7 @@
 require_relative 'helper'
 require 'qeweney/test_adapter'
 
-class TestAdapterTest < MiniTest::Test
+class TestAdapterTest < Minitest::Test
   def test_test_adapter
     adapter = Qeweney::TestAdapter.new
     req = Qeweney::Request.new({ ':path' => '/foo' }, adapter)

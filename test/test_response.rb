@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class RedirectTest < MiniTest::Test
+class RedirectTest < Minitest::Test
   def test_redirect
     r = Qeweney.mock
     r.redirect('/foo')
@@ -22,7 +22,7 @@ class RedirectTest < MiniTest::Test
   end
 end
 
-class StaticFileResponeTest < MiniTest::Test
+class StaticFileResponeTest < Minitest::Test
   def setup
     @path = File.join(__dir__, 'helper.rb')
     @stat = File.stat(@path)
@@ -114,7 +114,7 @@ class StaticFileResponeTest < MiniTest::Test
   end
 end
 
-class UpgradeTest < MiniTest::Test
+class UpgradeTest < Minitest::Test
   def test_upgrade
     r = Qeweney.mock
     r.upgrade('df')
@@ -167,7 +167,7 @@ class UpgradeTest < MiniTest::Test
   end
 end
 
-class ServeRackTest < MiniTest::Test
+class ServeRackTest < Minitest::Test
   def test_serve_rack
     r = Qeweney.mock(
       ':method' => 'get',

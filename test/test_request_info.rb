@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class RequestInfoTest < MiniTest::Test
+class RequestInfoTest < Minitest::Test
   def test_uri
     r = Qeweney.mock(':path' => '/test/path')
     assert_equal '/test/path', r.path

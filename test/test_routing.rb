@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class RoutingTest < MiniTest::Test
+class RoutingTest < Minitest::Test
   App1 = ->(r) do
     r.route do
       r.on_root { r.redirect '/hello' }

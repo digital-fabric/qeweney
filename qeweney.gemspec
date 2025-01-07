@@ -10,17 +10,16 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split
   s.homepage    = 'https://github.com/digital-fabric/qeweney'
   s.metadata    = {
-    "source_code_uri" => "https://github.com/digital-fabric/qeweney"
+    'source_code_uri' => 'https://github.com/digital-fabric/qeweney'
   }
-  s.rdoc_options = ["--title", "Qeweney", "--main", "README.md"]
-  s.extra_rdoc_files = ["README.md"]
-  s.require_paths = ["lib"]
+  s.rdoc_options = ['--title', 'Qeweney', '--main', 'README.md']
+  s.extra_rdoc_files = ['README.md']
+  s.require_paths = ['lib']
   s.required_ruby_version = '>= 2.6'
 
-  s.add_runtime_dependency      'escape_utils',       '~>1.3.0'
+  s.add_runtime_dependency      'escape_utils',       '1.3.0'
 
-  s.add_development_dependency  'rake',               '~>12.3.3'
-  s.add_development_dependency  'minitest',           '~>5.11.3'
-  s.add_development_dependency  'minitest-reporters', '~>1.4.2'
-  s.add_development_dependency  'benchmark-ips',      '~>2.8.3'
+  s.add_development_dependency  'benchmark-ips',      '2.14.0'
+  s.add_development_dependency  'minitest',           '5.25.4'
+  s.add_development_dependency  'rake',               '13.2.1'
 end
