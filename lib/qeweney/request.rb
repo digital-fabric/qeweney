@@ -45,7 +45,7 @@ module Qeweney
         end
         @buffered_body_chunks = nil
       end
-      while (chunk = @adapter.get_body_chunk(self))
+      while (chunk = @adapter.get_body_chunk(self, false))
         yield chunk
       end
     end

@@ -4,44 +4,44 @@ require_relative 'helper'
 
 class RequestInfoTest < Minitest::Test
   def test_uri
-    r = Qeweney.mock(':path' => '/test/path')
+    r = Qeweney::MockAdapter.mock(':path' => '/test/path')
     assert_equal '/test/path', r.path
     assert_equal({}, r.query)
 
-    r = Qeweney.mock(':path' => '/test/path?a=1&b=2&c=3%2f4')
+    r = Qeweney::MockAdapter.mock(':path' => '/test/path?a=1&b=2&c=3%2f4')
     assert_equal '/test/path', r.path
     assert_equal({ a: '1', b: '2', c: '3/4' }, r.query)
   end
 
   def test_query
-    r = Qeweney.mock(':path' => '/GponForm/diag_Form?images/')
+    r = Qeweney::MockAdapter.mock(':path' => '/GponForm/diag_Form?images/')
     assert_equal '/GponForm/diag_Form', r.path
     assert_equal({:'images/' => true}, r.query)
 
-    r = Qeweney.mock(':path' => '/?a=1&b=2')
+    r = Qeweney::MockAdapter.mock(':path' => '/?a=1&b=2')
     assert_equal '/', r.path
     assert_equal({a: '1', b: '2'}, r.query)
 
-    r = Qeweney.mock(':path' => '/?l=a&t=&x=42')
+    r = Qeweney::MockAdapter.mock(':path' => '/?l=a&t=&x=42')
     assert_equal({l: 'a', t: '', x: '42'}, r.query)
   end
 
   def test_host
-    r = Qeweney.mock(':path' => '/')
+    r = Qeweney::MockAdapter.mock(':path' => '/')
     assert_nil r.host
     assert_nil r.authority
 
-    r = Qeweney.mock('host' => 'my.example.com')
+    r = Qeweney::MockAdapter.mock('host' => 'my.example.com')
     assert_equal 'my.example.com', r.host
     assert_equal 'my.example.com', r.authority
 
-    r = Qeweney.mock(':authority' => 'my.foo.com')
+    r = Qeweney::MockAdapter.mock(':authority' => 'my.foo.com')
     assert_equal 'my.foo.com', r.host
     assert_equal 'my.foo.com', r.authority
   end
 
   def test_full_uri
-    r = Qeweney.mock(
+    r = Qeweney::MockAdapter.mock(
       ':scheme' => 'https',
       'host' => 'foo.bar',
       ':path' => '/hey?a=b&c=d'
@@ -51,11 +51,11 @@ class RequestInfoTest < Minitest::Test
   end
 
   def test_cookies
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
 
     assert_equal({}, r.cookies)
 
-    r = Qeweney.mock(
+    r = Qeweney::MockAdapter.mock(
       'cookie' => 'uaid=a%2Fb; lastLocus=settings; signin_ref=/'
     )
 
@@ -67,7 +67,7 @@ class RequestInfoTest < Minitest::Test
   end
 
   def test_rewrite!
-    r = Qeweney.mock(
+    r = Qeweney::MockAdapter.mock(
       ':scheme' => 'https',
       'host' => 'foo.bar',
       ':path' => '/hey/ho?a=b&c=d'

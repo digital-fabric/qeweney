@@ -4,21 +4,21 @@ require_relative 'helper'
 
 class RedirectTest < Minitest::Test
   def test_redirect
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
     r.redirect('/foo')
 
     assert_equal [
       [:respond, r, nil, {":status"=>302, "Location"=>"/foo"}]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 
   def test_redirect_wirth_status
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
     r.redirect('/bar', Qeweney::Status::MOVED_PERMANENTLY)
 
     assert_equal [
       [:respond, r, nil, {":status"=>301, "Location"=>"/bar"}]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 end
 
@@ -33,42 +33,42 @@ class StaticFileResponeTest < Minitest::Test
   end
 
   def test_serve_file
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
     r.serve_file('helper.rb', base_path: __dir__)
 
     assert_equal [
       [:respond, r, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 
   def test_serve_file_with_cache_headers
-    r = Qeweney.mock('if-none-match' => @etag)
+    r = Qeweney::MockAdapter.mock('if-none-match' => @etag)
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
       [:respond, r, nil, { 'etag' => @etag, ':status' => Qeweney::Status::NOT_MODIFIED }]
-    ], r.response_calls
+    ], r.adapter.calls
 
-    r = Qeweney.mock('if-modified-since' => @last_modified)
+    r = Qeweney::MockAdapter.mock('if-modified-since' => @last_modified)
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
       [:respond, r, nil, { 'etag' => @etag, ':status' => Qeweney::Status::NOT_MODIFIED }]
-    ], r.response_calls
+    ], r.adapter.calls
 
-    r = Qeweney.mock('if-none-match' => 'foobar')
+    r = Qeweney::MockAdapter.mock('if-none-match' => 'foobar')
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
       [:respond, r, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
-    ], r.response_calls
+    ], r.adapter.calls
 
-    r = Qeweney.mock('if-modified-since' => Time.now.httpdate)
+    r = Qeweney::MockAdapter.mock('if-modified-since' => Time.now.httpdate)
     r.serve_file('helper.rb', base_path: __dir__)
     assert_equal [
       [:respond, r, @content, { 'etag' => @etag, 'last-modified' => @last_modified }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 
   def test_serve_file_deflate
-    r = Qeweney.mock('accept-encoding' => 'deflate')
+    r = Qeweney::MockAdapter.mock('accept-encoding' => 'deflate')
     r.serve_file('helper.rb', base_path: __dir__)
 
     deflate = Zlib::Deflate.new
@@ -81,11 +81,11 @@ class StaticFileResponeTest < Minitest::Test
         'vary' => 'Accept-Encoding',
         'content-encoding' => 'deflate'
       }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 
   def test_serve_file_gzip
-    r = Qeweney.mock('accept-encoding' => 'gzip')
+    r = Qeweney::MockAdapter.mock('accept-encoding' => 'gzip')
     r.serve_file('helper.rb', base_path: __dir__)
 
     buf = StringIO.new
@@ -102,21 +102,21 @@ class StaticFileResponeTest < Minitest::Test
         'vary' => 'Accept-Encoding',
         'content-encoding' => 'gzip'
       }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 
   def test_serve_file_non_existent
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
     r.serve_file('foo.rb', base_path: __dir__)
     assert_equal [
       [:respond, r, nil, { ':status' => Qeweney::Status::NOT_FOUND }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 end
 
 class UpgradeTest < Minitest::Test
   def test_upgrade
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
     r.upgrade('df')
 
     assert_equal [
@@ -125,10 +125,10 @@ class UpgradeTest < Minitest::Test
         'Upgrade' => 'df',
         'Connection' => 'upgrade'
       }]
-    ], r.response_calls
+    ], r.adapter.calls
 
 
-    r = Qeweney.mock
+    r = Qeweney::MockAdapter.mock
     r.upgrade('df', { 'foo' => 'bar' })
 
     assert_equal [
@@ -138,11 +138,11 @@ class UpgradeTest < Minitest::Test
         'Connection' => 'upgrade',
         'foo' => 'bar'
       }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 
   def test_websocket_upgrade
-    r = Qeweney.mock(
+    r = Qeweney::MockAdapter.mock(
       'connection' => 'upgrade',
       'upgrade' => 'websocket',
       'sec-websocket-version' => '23',
@@ -163,13 +163,13 @@ class UpgradeTest < Minitest::Test
         'Sec-WebSocket-Accept' => accept
       }],
       [:websocket_connection, r]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 end
 
 class ServeRackTest < Minitest::Test
   def test_serve_rack
-    r = Qeweney.mock(
+    r = Qeweney::MockAdapter.mock(
       ':method' => 'get',
       ':path' => '/foo/bar?a=1&b=2%2F3',
       'accept' => 'blah'
@@ -180,6 +180,6 @@ class ServeRackTest < Minitest::Test
 
     assert_equal [
       [:respond, r, 'GET /foo/bar', {':status' => 404, 'Foo' => 'Bar' }]
-    ], r.response_calls
+    ], r.adapter.calls
   end
 end
