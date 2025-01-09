@@ -1,3 +1,7 @@
+## 0.20 2025-01-09
+
+- Improve `Qeweney::MockAdapter`
+
 ## 0.18 2022-02-16
 
 - Implement `Request#rewrite!` (#2)
