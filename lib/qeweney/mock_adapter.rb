@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'qeweney'
+
 module Qeweney
   class MockAdapter
     attr_reader :body, :headers, :calls
