@@ -1,6 +1,11 @@
+## 0.22 2025-08-28
+
+- Improve form data parsing.
+- Add `Qeweney::BadRequestError` exception class.
+
 ## 0.20 2025-01-09
 
-- Improve `Qeweney::MockAdapter`
+- Improve `Qeweney::MockAdapter`.
 
 ## 0.18 2022-02-16
 
