@@ -3,5 +3,6 @@
 module Qeweney
 end
 
-require_relative 'qeweney/request.rb'
-require_relative 'qeweney/status.rb'
+require_relative 'qeweney/errors'
+require_relative 'qeweney/request'
+require_relative 'qeweney/status'

@@ -3,6 +3,8 @@
 require 'uri'
 require 'escape_utils'
 
+require_relative './errors'
+
 module Qeweney
   module RequestInfoMethods
     def host
@@ -126,12 +128,13 @@ module Qeweney
       when /^application\/x-www-form-urlencoded/
         parse_urlencoded_form_data(body)
       else
-        raise "Unsupported form data content type: #{content_type}"
+        raise BadRequestError, "Unsupported form data content type: #{content_type}"
       end
     end
 
     def parse_multipart_form_data(body, boundary)
       parts = body.split(boundary)
+      raise BadRequestError, 'Invalid form data' if parts.size < 2
       parts.each_with_object({}) do |p, h|
         next if p.empty? || p == "--\r\n"
 
@@ -174,7 +177,7 @@ module Qeweney
       [part, headers]
     end
 
-    PARAMETER_RE = /^(.+)=(.*)$/.freeze
+    PARAMETER_RE = /^([^=]+)(?:=(.*))?$/.freeze
     MAX_PARAMETER_NAME_SIZE = 256
     MAX_PARAMETER_VALUE_SIZE = 2**20 # 1MB
 
@@ -183,15 +186,15 @@ module Qeweney
 
       body.force_encoding(Encoding::UTF_8) unless body.encoding == Encoding::UTF_8
       body.split('&').each_with_object({}) do |i, m|
-        raise 'Invalid parameter format' unless i =~ PARAMETER_RE
+        raise BadRequestError, 'Invalid parameter format' unless i =~ PARAMETER_RE
 
         k = Regexp.last_match(1)
-        raise 'Invalid parameter size' if k.size > MAX_PARAMETER_NAME_SIZE
+        raise BadRequestError, 'Invalid parameter size' if k.size > MAX_PARAMETER_NAME_SIZE
 
         v = Regexp.last_match(2)
-        raise 'Invalid parameter size' if v.size > MAX_PARAMETER_VALUE_SIZE
+        raise BadRequestError, 'Invalid parameter size' if v && v.size > MAX_PARAMETER_VALUE_SIZE
 
-        m[EscapeUtils.unescape_uri(k)] = EscapeUtils.unescape_uri(v)
+        m[EscapeUtils.unescape_uri(k)] = v ? EscapeUtils.unescape_uri(v) : true
       end
     end
   end
