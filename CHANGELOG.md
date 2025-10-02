@@ -1,3 +1,7 @@
+## 0.23 2025-10-02
+
+- Add missing SVG mime type
+
 ## 0.22 2025-08-28
 
 - Improve form data parsing.
