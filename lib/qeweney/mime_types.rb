@@ -15,6 +15,7 @@ module Qeweney
       'jpeg'  => 'image/jpeg',
       'png'   => 'image/png',
       'ico'   => 'image/x-icon',
+      'svg'   => 'image/svg+xml',
 
       'pdf'   => 'application/pdf',
       'json'  => 'application/json',

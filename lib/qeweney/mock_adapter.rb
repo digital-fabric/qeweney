@@ -4,7 +4,7 @@ require 'qeweney'
 
 module Qeweney
   class MockAdapter
-    attr_reader :body, :headers, :calls
+    attr_reader :response_body, :response_headers, :calls
 
     def get_body_chunk(_req, _buffered_only)
       @request_body_chunks.shift
@@ -32,9 +32,13 @@ module Qeweney
       @calls = []
     end
 
+    def set_response_headers(headers)
+      @response_headers = header
+    end
+
     def respond(req, body, headers)
       @calls << [:respond, req, body, headers]
-      @body = body
+      @response_body = body
       @headers = headers
     end
 
