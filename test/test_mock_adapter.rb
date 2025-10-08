@@ -8,8 +8,8 @@ class MockAdapterTest < Minitest::Test
     req = Qeweney::Request.new({ ':path' => '/foo' }, adapter)
     req.respond('bar', 'Content-Type' => 'baz')
 
-    assert_equal 'bar', adapter.body
-    assert_equal({'Content-Type' => 'baz'}, adapter.headers)
+    assert_equal 'bar', adapter.response_body
+    assert_equal({'Content-Type' => 'baz'}, adapter.response_headers)
   end
 
   def test_mock_adapter_with_body

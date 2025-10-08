@@ -39,11 +39,11 @@ module Qeweney
     def respond(req, body, headers)
       @calls << [:respond, req, body, headers]
       @response_body = body
-      @headers = headers
+      @response_headers = headers
     end
 
     def status
-      headers[':status'] || Qeweney::Status::OK
+      response_headers[':status'] || Qeweney::Status::OK
     end
 
     def method_missing(sym, *args)
