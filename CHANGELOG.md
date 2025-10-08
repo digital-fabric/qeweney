@@ -1,3 +1,8 @@
+## 0.24 2025-10-08
+
+- Use `gem.coop` in Gemfile
+- Fix `MockAdapter`
+
 ## 0.23 2025-10-02
 
 - Add missing SVG mime type
