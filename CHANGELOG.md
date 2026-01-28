@@ -1,3 +1,7 @@
+## 0.25.1 2026-01-28
+
+- Fix #set_response_headers in MockAdapter
+
 ## 0.25 2026-01-28
 
 - Update dependencies
