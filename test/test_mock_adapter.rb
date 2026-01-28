@@ -46,4 +46,14 @@ class MockAdapterTest < Minitest::Test
     assert_equal ['bar', 'baz'], chunks
     assert_equal true, req.complete?
   end
+
+  def test_set_response_headers
+    adapter = Qeweney::MockAdapter.new(nil)
+    req = Qeweney::Request.new({ ':path' => '/foo' }, adapter)
+    adapter.set_response_headers('Foo' => 'bar')
+    req.respond('hi', 'Bar' => 'baz')
+
+    assert_equal 'hi', adapter.response_body
+    assert_equal({'Foo' => 'bar', 'Bar' => 'baz'}, adapter.response_headers)
+  end
 end

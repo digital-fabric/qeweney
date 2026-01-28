@@ -33,10 +33,11 @@ module Qeweney
     end
 
     def set_response_headers(headers)
-      @response_headers = header
+      @response_headers = headers
     end
 
     def respond(req, body, headers)
+      headers = @response_headers.merge(headers) if @response_headers
       @calls << [:respond, req, body, headers]
       @response_body = body
       @response_headers = headers
