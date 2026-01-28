@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ['--title', 'Qeweney', '--main', 'README.md']
   s.extra_rdoc_files = ['README.md']
   s.require_paths = ['lib']
-  s.required_ruby_version = '>= 2.6'
+  s.required_ruby_version = '>= 3.3'
 
   s.add_runtime_dependency      'cgi',            '0.5.1'
   s.add_runtime_dependency      'escape_utils',   '1.3.0'
